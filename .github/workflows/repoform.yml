@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 env:
-  tf_actions_working_dir: './../../base'
+  tf_actions_working_dir: '/base'
 
 jobs:
   terraform:
