@@ -5,15 +5,14 @@ terraform {
       source  = "integrations/github"
     }
   }
-  backend "local" {
-    path = "/home/user/github/cdktf-github-repo/terraform.cdktf-github-repo-dev.tfstate"
-  }
-
-
+  #   backend "local" {
+  #     path = """
+  #   }
 }
 
 provider "github" {
 }
+
 resource "github_repository" "SampleRepo" {
   name                        = "todelete_repo"
   visibility                  = "private"
@@ -35,6 +34,7 @@ resource "github_repository" "SampleRepo" {
   squash_merge_commit_title   = "PR_TITLE"
   #   vulnerability_alerts        = true
 }
+
 resource "github_branch_protection" "MainBranchProtection" {
   repository_id                   = github_repository.SampleRepo.node_id
   pattern                         = "main"
