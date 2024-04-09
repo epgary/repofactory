@@ -14,7 +14,7 @@ provider "github" {
 }
 
 resource "github_repository" "SampleRepo" {
-  name                        = "todelete_repo"
+  name                        = "sample"
   visibility                  = "private"
   allow_auto_merge            = false
   allow_merge_commit          = false
