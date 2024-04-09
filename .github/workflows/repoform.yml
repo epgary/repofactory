@@ -2,12 +2,7 @@ name: Terraform CI
 
 on:
   pull_request:
-  workflow_dispatch: # This line enables manual triggering of the workflow
-    inputs: # Define inputs for the manual trigger if needed
-      logLevel:
-        description: 'Log level'    
-        required: false
-        default: 'warning' # Example input, you can customize or remove as per your needs
+  workflow_dispatch:
 
 env:
   tf_actions_working_dir: './../../base'
