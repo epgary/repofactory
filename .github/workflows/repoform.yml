@@ -131,7 +131,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: tfplan
-        path: .
+        path: ${{ env.tf_actions_working_dir }}
 
     - name: Terraform Apply
       run: terraform apply -auto-approve tfplan
