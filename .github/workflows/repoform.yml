@@ -2,6 +2,9 @@ name: Terraform CI
 
 on:
   pull_request:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 env:
@@ -81,3 +84,26 @@ jobs:
             repo: context.repo.repo,
             body: output
           });
+
+  apply:
+    needs: terraform
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      pull-requests: write
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v3
+      with:
+        name: tfplan
+        path: .
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan
