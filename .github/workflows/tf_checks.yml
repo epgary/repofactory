@@ -15,7 +15,7 @@ env:
   TF_INPUT: false
 
 jobs:
-  terraform:
+  tf_checks:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -59,7 +59,7 @@ jobs:
             return (status === 'success') ? '✅' : '❌'
           }
     
-          // 1. Prepare format of the output
+          // 1. Prepare `tf_checks` output
           const output =`
             #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Init ⚙️
 
@@ -89,7 +89,7 @@ jobs:
             Workflow: \`${{ github.workflow }}\`*
           `;
 
-          // 2. Update `GITHUB_STEP_SUMMARY`
+          // 2. Add `GITHUB_STEP_SUMMARY`
           await core.summary
             .addHeading('Results')
             .addRaw(output)
