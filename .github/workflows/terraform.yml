@@ -98,7 +98,7 @@ jobs:
             
             </details>
             
-            #### ${emojiStatus('${{ needs.terraform.outputs.plan.outcome }}')} Terraform Plan 📖
+            #### ${emojiStatus('${{ needs.terraform.outputs.tf_plan.outcome }}')} Terraform Plan 📖
             <details><summary>Show Plan</summary>
             
             \`\`\`
