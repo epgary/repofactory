@@ -63,9 +63,11 @@ jobs:
           })
     
           // 2. Prepare format of the comment
-          const output = `
+          const output =`
             #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Initialization ⚙️
+
             #### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format and Style 🖌
+
             #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validation 🤖
             <details><summary>Show Validation</summary>
             
@@ -76,7 +78,6 @@ jobs:
             </details>
             
             #### ${emojiStatus('${{ steps.plan.outcome }}')} Terraform Plan 📖
-            
             <details><summary>Show Plan</summary>
             
             \`\`\`
@@ -85,12 +86,10 @@ jobs:
             
             </details>
             
-            *
-              Pusher: @${{ github.actor }}
-              Action: ${{ github.event_name }}
-              Working Directory: \`${{ env.tf_actions_working_dir }}\`
-              Workflow: \`${{ github.workflow }}\`
-            *
+            *Pusher: @${{ github.actor }}
+            Action: \`${{ github.event_name }}\`
+            Working Directory: \`${{ env.tf_actions_working_dir }}\`
+            Workflow: \`${{ github.workflow }}\`*
           `;
     
           // 3. If we have a comment, update it, otherwise create a new one
