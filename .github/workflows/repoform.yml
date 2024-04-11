@@ -62,14 +62,7 @@ jobs:
             // Check if the comment is from the 'github-actions' bot
             const isBotComment = comment.user.login === 'github-actions'
           
-            // Check if the comment body contains specific keywords related to the Terraform workflow
-            const containsKeywords =
-              comment.body.includes('Terraform Init') &&
-              comment.body.includes('Terraform Format') &&
-              comment.body.includes('Terraform Validate') &&
-              comment.body.includes('Terraform Plan')
-          
-            return isBotComment && containsKeywords
+            return isBotComment
           })
     
           // 2. Prepare format of the comment
