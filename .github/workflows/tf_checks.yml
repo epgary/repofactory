@@ -1,13 +1,12 @@
 name: Terraform Checks
 
 on:
+  push:
+    branches-ignore:
+      - 'main'
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - '**'
-      - '!main'
 
 env:
   WORKING_DIR: './base'
