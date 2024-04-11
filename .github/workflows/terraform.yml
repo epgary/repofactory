@@ -17,8 +17,11 @@ env:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
+    outputs:
+      tf_init: ${{ steps.tf_init.outputs }}
+      tf_fmt: ${{ steps.tf_fmt.outputs }}
+      tf_validate: ${{ steps.tf_validate.outputs }}
+      tf_plan: ${{ steps.tf_plan.outputs }}
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
@@ -84,22 +87,22 @@ jobs:
           const output =`
             #### ${emojiStatus('${{ needs.terraform.outputs.tf_init.outcome }}')} Terraform Init ⚙️
 
-            #### ${emojiStatus('${{ steps.tf_fmt.outcome }}')} Terraform Format 🖌
+            #### ${emojiStatus('${{ needs.terraform.outputs.tf_fmt.outcome }}')} Terraform Format 🖌
             
-            #### ${emojiStatus('${{ steps.tf_validate.outcome }}')} Terraform Validate 🤖
+            #### ${emojiStatus('${{ needs.terraform.outputs.tf_validate.outcome }}')} Terraform Validate 🤖
             <details><summary>Show Validation</summary>
             
             \`\`\`
-            ${{ steps.tf_validate.outputs.stdout || steps.tf_validate.outputs.stderr }}
+            ${{ needs.terraform.outputs.tf_validate.outputs.stdout || needs.terraform.outputs.tf_validate.outputs.stderr }}
             \`\`\`
             
             </details>
             
-            #### ${emojiStatus('${{ steps.plan.outcome }}')} Terraform Plan 📖
+            #### ${emojiStatus('${{ needs.terraform.outputs.plan.outcome }}')} Terraform Plan 📖
             <details><summary>Show Plan</summary>
             
             \`\`\`
-            ${{ steps.tf_plan.outputs.stdout || steps.tf_plan.outputs.stderr }}
+            ${{ needs.terraform.outputs.tf_plan.outputs.stdout || needs.terraform.outputs.tf_plan.outputs.stderr }}
             \`\`\`
             
             </details>
@@ -128,7 +131,7 @@ jobs:
           }
     
           // 4. Fail the workflow if one of the steps failed
-          const statuses = ['${{ steps.tf_init.outcome }}', '${{ steps.tf_fmt.outcome }}', '${{ steps.tf_validate.outcome }}', '${{ steps.tf_plan.outcome }}']
+          const statuses = ['${{ needs.terraform.outputs.tf_init.outcome }}', '${{ needs.terraform.outputs.tf_fmt.outcome }}', '${{ needs.terraform.outputs.tf_validate.outcome }}', '${{ needs.terraform.outputs.tf_plan.outcome }}']
           if (statuses.includes("failure")) {
             core.setFailed("Terraform failed, check PR comment for details")
           }
