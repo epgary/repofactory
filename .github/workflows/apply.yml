@@ -26,4 +26,4 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
