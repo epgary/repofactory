@@ -70,9 +70,11 @@ jobs:
 
             #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validate 🤖
             <details><summary>Show Validate</summary>
+            
             \`\`\`
             ${{ steps.validate.outputs.stdout || steps.validate.outputs.stderr }}
             \`\`\`
+            
             </details>
             
             #### ${emojiStatus('${{ steps.plan.outcome }}')} Terraform Plan 📖
