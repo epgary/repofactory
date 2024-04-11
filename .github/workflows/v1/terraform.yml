@@ -27,22 +27,22 @@ jobs:
       uses: hashicorp/setup-terraform@v3
 
     - name: Terraform Init
-      id: init
+      id: tf_init
       run: terraform init
       continue-on-error: true
 
     - name: Terraform Format
-      id: fmt
+      id: tf_fmt
       run: terraform fmt -check
       continue-on-error: true
 
     - name: Terraform Validate
-      id: validate
+      id: tf_validate
       run: terraform validate -no-color
       continue-on-error: true
     
     - name: Terraform Plan
-      id: plan
+      id: tf_plan
       run: terraform plan -no-color
       continue-on-error: true
 
@@ -71,15 +71,15 @@ jobs:
     
           // 2. Prepare format of the comment
           const output =`
-            #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Init ⚙️
+            #### ${emojiStatus('${{ steps.tf_init.outcome }}')} Terraform Init ⚙️
 
-            #### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format 🖌
+            #### ${emojiStatus('${{ steps.tf_fmt.outcome }}')} Terraform Format 🖌
             
-            #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validate 🤖
+            #### ${emojiStatus('${{ steps.tf_validate.outcome }}')} Terraform Validate 🤖
             <details><summary>Show Validation</summary>
             
             \`\`\`
-            ${{ steps.validate.outputs.stdout || steps.validate.outputs.stderr }}
+            ${{ steps.tf_validate.outputs.stdout || steps.tf_validate.outputs.stderr }}
             \`\`\`
             
             </details>
@@ -88,7 +88,7 @@ jobs:
             <details><summary>Show Plan</summary>
             
             \`\`\`
-            ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
+            ${{ steps.tf_plan.outputs.stdout || steps.tf_plan.outputs.stderr }}
             \`\`\`
             
             </details>
@@ -117,7 +117,7 @@ jobs:
           }
     
           // 4. Fail the workflow if one of the steps failed
-          const statuses = ['${{ steps.init.outcome }}', '${{ steps.fmt.outcome }}', '${{ steps.validate.outcome }}', '${{ steps.plan.outcome }}']
+          const statuses = ['${{ steps.tf_init.outcome }}', '${{ steps.tf_fmt.outcome }}', '${{ steps.tf_validate.outcome }}', '${{ steps.tf_plan.outcome }}']
           if (statuses.includes("failure")) {
             core.setFailed("Terraform failed, check PR comment for details")
           }
