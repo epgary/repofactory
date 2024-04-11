@@ -103,7 +103,7 @@ jobs:
             '${{ steps.plan.outcome }}'
           ]
           if (statuses.includes("failure")) {
-            core.setFailed("Terraform failed, check step summary for details")
+            core.setFailed("Terraform failed, check step summary for details.")
           }
 
           /*
