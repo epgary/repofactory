@@ -61,7 +61,7 @@ jobs:
           const botComment = comments.find(comment => {
             return
               comment.user.type === 'Bot' &&
-              comment.user.login.includes('github-actions[bot]') &&
+              comment.user.login.includes('github-actions') &&
               comment.body.includes('Terraform Format')
           })
     
