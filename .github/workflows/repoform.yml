@@ -22,7 +22,7 @@ jobs:
 
     - name: Terraform fmt
       id: fmt
-      run: terraform fmt -check || echo "tf_fmt_failure" >> $GITHUB_ENV
+      run: terraform fmt -check
       continue-on-error: true
 
     - name: Terraform Init
