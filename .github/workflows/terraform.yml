@@ -88,8 +88,14 @@ jobs:
             Working Directory: \`${{ env.WORKING_DIR }}\`
             Workflow: \`${{ github.workflow }}\`*
           `;
-    
-          // 2. Fail the workflow if one of the steps failed
+
+          // 2. Update `GITHUB_STEP_SUMMARY`
+          await core.summary
+            .addHeading('Results')
+            .addRaw(output)
+            .write()
+
+          // 3. Fail the workflow if one of the steps failed
           const statuses = [
             '${{ steps.init.outcome }}',
             '${{ steps.fmt.outcome }}',
@@ -99,13 +105,6 @@ jobs:
           if (statuses.includes("failure")) {
             core.setFailed("Terraform failed, check PR comment for details")
           }
-
-          // 3. Update `GITHUB_STEP_SUMMARY`
-          await core.summary
-            .addHeading('Results')
-            .addRaw(output)
-            .write()
-
 
           /*
            * EXECUTE ONLY ON PULL REQUEST
