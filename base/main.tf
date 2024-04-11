@@ -13,7 +13,7 @@ provider "github" {
 
 resource "github_repository" "SampleRepo" {
   name                        = "todelete_sample"
-  visibility                  = "publicc"
+  visibility                  = "public"
   allow_auto_merge            = false
   allow_merge_commit          = false
   allow_rebase_merge          = false
