@@ -64,11 +64,11 @@ jobs:
     
           // 2. Prepare format of the comment
           const output =`
-            #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Initialization ⚙️
+            #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Init ⚙️
 
-            #### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format and Style 🖌
+            #### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format 🖌
             
-            #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validation 🤖
+            #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validate 🤖
             <details><summary>Show Validation</summary>
             
             \`\`\`
@@ -78,7 +78,6 @@ jobs:
             </details>
             
             #### ${emojiStatus('${{ steps.plan.outcome }}')} Terraform Plan 📖
-            
             <details><summary>Show Plan</summary>
             
             \`\`\`
