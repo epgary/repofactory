@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  tf_actions_working_dir: './base'
+  WORKING_DIR: './base'
   TF_LOG: INFO
   TF_INPUT: false
 
@@ -17,7 +17,7 @@ jobs:
       pull-requests: write
     defaults:
       run:
-        working-directory: ${{ env.tf_actions_working_dir }}
+        working-directory: ${{ env.WORKING_DIR }}
     steps:
     - uses: actions/checkout@v4
     
