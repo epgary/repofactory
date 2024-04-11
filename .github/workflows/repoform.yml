@@ -74,7 +74,7 @@ jobs:
             \`\`\`
             ${{ steps.validate.outputs.stdout || steps.validate.outputs.stderr }}
             \`\`\`
-            
+
             </details>
             
             #### ${emojiStatus('${{ steps.plan.outcome }}')} Terraform Plan 📖
@@ -110,7 +110,7 @@ jobs:
           }
     
           // 4. Fail the workflow if one of the steps failed
-          const statuses = ['${{ steps.fmt.outcome }}', '${{ steps.init.outcome }}', '${{ steps.validate.outcome }}', '${{ steps.plan.outcome }}']
+          const statuses = ['${{ steps.init.outcome }}', '${{ steps.fmt.outcome }}', '${{ steps.validate.outcome }}', '${{ steps.plan.outcome }}']
           if (statuses.includes("failure")) {
             core.setFailed("Terraform failed, check PR comment for details")
           }
