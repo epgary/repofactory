@@ -31,16 +31,11 @@ jobs:
 
     - name: Terraform Validate
       id: validate
-      run: |
-        output=$(terraform validate -no-color)
-        echo "::set-output name=stdout::$output"
-      continue-on-error: true
-
+      run: terraform validate -no-color
+    
     - name: Terraform Plan
       id: plan
-      run: |
-        terraform plan -no-color -out=tfplan
-        echo "::set-output name=stdout::$(terraform show -no-color tfplan)"
+      run: terraform plan -no-color
       continue-on-error: true
 
     - name: List all files in directory with full path
