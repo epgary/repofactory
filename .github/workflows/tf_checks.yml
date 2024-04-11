@@ -83,8 +83,8 @@ jobs:
             
             </details>
             
-            *Pusher: @${{ github.actor }}
-            Action: \`${{ github.event_name }}\`
+            *Actor: @${{ github.actor }}
+            Event: \`${{ github.event_name }}\`
             Working Directory: \`${{ env.WORKING_DIR }}\`
             Workflow: \`${{ github.workflow }}\`*
           `;
