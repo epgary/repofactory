@@ -1,4 +1,4 @@
-name: Push to Feature
+name: Push to Feature branch
 
 on:
   push:
@@ -41,4 +41,5 @@ jobs:
       continue-on-error: true
     
     - name: Check for failures
+      if: steps.tf_init.outcome == 'failure' || steps.tf_fmt.outcome == 'failure' || steps.tf_validate.outcome == 'failure'
       run: exit 1
