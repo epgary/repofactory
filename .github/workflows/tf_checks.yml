@@ -3,10 +3,10 @@ name: Terraform Checks
 on:
   push:
     branches-ignore:
-      - main
+      - 'main'
   pull_request:
     branches:
-      - main
+      - 'main'
 
 env:
   WORKING_DIR: './base'
@@ -59,7 +59,7 @@ jobs:
           }
     
           // 1. Prepare `tf_checks` output
-          const output =`
+          const output = `
             #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Init ⚙️
 
             #### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format 🖌

@@ -3,7 +3,7 @@ name: Terraform
 on:
   pull_request:
     branches:
-      - main
+      - 'main'
 
 env:
   WORKING_DIR: './base'
@@ -71,7 +71,7 @@ jobs:
           })
     
           // 2. Prepare format of the comment
-          const output =`
+          const output = `
             #### ${emojiStatus('${{ steps.tf_init.outcome }}')} Terraform Init ⚙️
 
             #### ${emojiStatus('${{ steps.tf_fmt.outcome }}')} Terraform Format 🖌

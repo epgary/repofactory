@@ -3,7 +3,7 @@ name: Merge to Main
 on:
   push:
     branches:
-      - main
+      - 'main'
 
 env:
   WORKING_DIR: './base'
