@@ -1,15 +1,16 @@
 name: Terraform Checks
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - '**'
       - '!main'
       - '!pull_request/**'
-  pull_request:
-    branches:
-      - main
-
+    paths-ignore:
+      - '**'
 env:
   WORKING_DIR: './base'
   TF_LOG: INFO
