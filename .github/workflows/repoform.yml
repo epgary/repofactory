@@ -107,11 +107,11 @@ jobs:
             })
           }
 
-    - name: Upload Terraform Plan
-      uses: actions/upload-artifact@v3
-      with:
-        name: tfplan
-        path: ${{ env.tf_actions_working_dir }}/tfplan
+    # - name: Upload Terraform Plan
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: tfplan
+    #     path: ${{ env.tf_actions_working_dir }}/tfplan
 
   apply:
     needs: terraform
