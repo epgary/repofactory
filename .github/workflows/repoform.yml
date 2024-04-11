@@ -117,9 +117,9 @@ jobs:
     needs: terraform
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    permissions:
-      pull-requests: write
-      contents: write
+    # permissions:
+    #   pull-requests: write
+    #   contents: write
     defaults:
       run:
         working-directory: ${{ env.tf_actions_working_dir }}
