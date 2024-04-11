@@ -6,5 +6,3 @@ sds
 ddd
 srde
 ffff
-
-rr
