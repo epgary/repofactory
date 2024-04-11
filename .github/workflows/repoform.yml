@@ -131,15 +131,15 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init
+      run: terraform init -input=false
 
-    - name: Download Terraform Plan
-      uses: actions/download-artifact@v3
-      with:
-        name: tfplan
-        path: ${{ env.tf_actions_working_dir }}
+    # - name: Download Terraform Plan
+    #   uses: actions/download-artifact@v3
+    #   with:
+    #     name: tfplan
+    #     path: ${{ env.tf_actions_working_dir }}
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve tfplan
+      run: terraform apply -input=false -auto-approve
       env:
         GITHUB_TOKEN: ${{ github.token }}
