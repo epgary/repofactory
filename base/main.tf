@@ -11,7 +11,7 @@ terraform {
 }
 
 provider "github" {
-  owner = "EducationPerfect"
+  # owner = "EducationPerfect"
 }
 
 resource "github_repository" "SampleRepo" {
