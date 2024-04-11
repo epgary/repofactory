@@ -11,7 +11,7 @@ env:
   TF_INPUT: false
 
 jobs:
-  apply:
+  merge_main:
     runs-on: ubuntu-latest
     defaults:
       run:
