@@ -69,7 +69,7 @@ jobs:
           <details><summary>Validation Output</summary>
     
           \`\`\`\n
-          ${{ steps.validate.outputs.stdout.trim || steps.validate.outputs.stderr.trim }}
+          ${{ steps.validate.outputs.stdout || steps.validate.outputs.stderr }}.trim()
           \`\`\`
     
           </details>
