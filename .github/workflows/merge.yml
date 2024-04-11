@@ -1,4 +1,4 @@
-name: Terraform CD
+name: Merge to Main branch
 
 on:
   push:
