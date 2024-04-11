@@ -69,7 +69,7 @@ jobs:
           #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validation 🤖
           <details><summary>Validation Output</summary>
     
-          \`\`\`\n
+          \`\`\`
           ${{ steps.validate.outputs.stdout || steps.validate.outputs.stderr }}
           \`\`\`
     
@@ -79,7 +79,7 @@ jobs:
     
           <details><summary>Show Plan</summary>
     
-          \`\`\`\n
+          \`\`\`
           ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
           \`\`\`
     
