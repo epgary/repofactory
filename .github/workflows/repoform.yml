@@ -59,16 +59,10 @@ jobs:
             issue_number: context.issue.number,
           })
           const botComment = comments.find(comment => {
-            // Check if the comment is from the 'github-actions' bot
-            const isBotComment = comment.user.login === 'github-actions'
-          
-            return isBotComment
-          })
-          const pippo = comments.find(comment => {
-            // Check if the comment is from the 'github-actions' bot
-            const isBotComment = comment.user.login === 'github-actions'
-          
-            return comment.user.login
+            return
+              comment.user.type === 'Bot' &&
+              comment.user.login.includes('github-actions[bot]') &&
+              comment.body.includes('Terraform Format')
           })
     
           // 2. Prepare format of the comment
@@ -107,14 +101,14 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               comment_id: botComment.id,
-              body: pippo
+              body: output
             })
           } else {
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: pippo
+              body: output
             })
           }
     
