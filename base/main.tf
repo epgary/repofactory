@@ -11,10 +11,11 @@ terraform {
 }
 
 provider "github" {
+  owner = "EducationPerfect"
 }
 
 resource "github_repository" "SampleRepo" {
-  name                        = "sample"
+  name                        = "todelete_sample"
   visibility                  = "private"
   allow_auto_merge            = false
   allow_merge_commit          = false
