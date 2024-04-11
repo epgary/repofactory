@@ -18,10 +18,13 @@ jobs:
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
+
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
     
-    - uses: hashicorp/setup-terraform@v3
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
 
     - name: Terraform Init
       id: init
