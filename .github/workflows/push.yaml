@@ -39,3 +39,7 @@ jobs:
       id: tf_validate
       run: terraform validate -no-color
       continue-on-error: true
+    
+    - name: Check for failures
+      if: steps.tf_init.conclusion == 'failure' || steps.tf_fmt.conclusion == 'failure' || steps.tf_validate.conclusion == 'failure'
+      run: exit 1
