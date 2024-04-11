@@ -117,6 +117,6 @@ jobs:
 
           // 5. Update GITHUB_STEP_SUMMARY
           await core.summary
-              .addHeading('Results')
-              .addRaw(output)
-              .write()
+            .addHeading('Results')
+            .addRaw(output)
+            .write()
