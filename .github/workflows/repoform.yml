@@ -66,6 +66,7 @@ jobs:
           const output =`
             #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Init ⚙️
 
+            
             #### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format 🖌
             
             #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validate 🤖
