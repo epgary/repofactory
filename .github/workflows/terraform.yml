@@ -59,7 +59,6 @@ jobs:
             return (status === 'success') ? '✅' : '❌'
           }
     
-
           // 1. Prepare format of the output
           const output =`
             #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Init ⚙️
@@ -90,7 +89,6 @@ jobs:
             Workflow: \`${{ github.workflow }}\`*
           `;
     
-
           // 2. Fail the workflow if one of the steps failed
           const statuses = [
             '${{ steps.init.outcome }}',
@@ -102,7 +100,6 @@ jobs:
             core.setFailed("Terraform failed, check PR comment for details")
           }
 
-
           // 3. Update `GITHUB_STEP_SUMMARY`
           await core.summary
             .addHeading('Results')
@@ -110,7 +107,10 @@ jobs:
             .write()
 
 
-          // EXECUTE ONLY FOR PULL REQUEST
+          /*
+           * EXECUTE ONLY FOR PULL REQUEST
+           */
+
           if (context.eventName === 'pull_request') {
             // 4. Retrieve existing bot comments for the PR
             const { data: comments } = await github.rest.issues.listComments({
