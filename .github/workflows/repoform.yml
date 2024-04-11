@@ -107,20 +107,10 @@ jobs:
             })
           }
 
-    # - name: Upload Terraform Plan
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: tfplan
-    #     path: ${{ env.tf_actions_working_dir }}/tfplan
-
   apply:
     needs: terraform
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    # permissions: write-all
-    # permissions:
-    #   pull-requests: write
-    #   contents: write
     defaults:
       run:
         working-directory: ${{ env.tf_actions_working_dir }}
@@ -132,12 +122,6 @@ jobs:
     - name: Terraform Init
       id: init
       run: terraform init -input=false
-
-    # - name: Download Terraform Plan
-    #   uses: actions/download-artifact@v3
-    #   with:
-    #     name: tfplan
-    #     path: ${{ env.tf_actions_working_dir }}
 
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve

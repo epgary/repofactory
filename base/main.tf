@@ -5,13 +5,9 @@ terraform {
       source  = "integrations/github"
     }
   }
-  #   backend "local" {
-  #     path = """
-  #   }
 }
 
 provider "github" {
-  # owner = "EducationPerfect"
 }
 
 resource "github_repository" "SampleRepo" {
@@ -33,7 +29,6 @@ resource "github_repository" "SampleRepo" {
   merge_commit_title          = "MERGE_MESSAGE"
   squash_merge_commit_message = "COMMIT_MESSAGES"
   squash_merge_commit_title   = "PR_TITLE"
-  #   vulnerability_alerts        = true
 }
 
 resource "github_branch_protection" "MainBranchProtection" {
