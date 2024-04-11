@@ -30,6 +30,6 @@ jobs:
 
     - name: Terraform Apply
       id: tf_apply
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -no-color
       env:
         GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
