@@ -127,6 +127,10 @@ jobs:
     
     - uses: hashicorp/setup-terraform@v3
 
+    - name: Terraform Init
+      id: init
+      run: terraform init
+
     - name: Download Terraform Plan
       uses: actions/download-artifact@v3
       with:
