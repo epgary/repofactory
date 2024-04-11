@@ -60,7 +60,7 @@ jobs:
           })
           const botComment = comments.find(comment => {
             // Check if the comment is from the 'github-actions' bot
-            const isBotComment = comment.user.login === 'github-actions'
+            const isBotComment = comment.user.login.includes('github-actions')
           
             return isBotComment
           })
