@@ -7,9 +7,7 @@ terraform {
   }
 }
 
-provider "github" {
-  owner = "epgary"
-}
+provider "github" {}
 
 resource "github_repository" "SampleRepo" {
   name                        = "todelete_sample"

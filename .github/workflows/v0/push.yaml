@@ -1,0 +1,45 @@
+name: Push to Feature branch
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!main'
+
+env:
+  WORKING_DIR: './base'
+  TF_LOG: INFO
+  TF_INPUT: false
+
+jobs: 
+  check-code:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform Init
+      id: tf_init
+      run: terraform init
+      continue-on-error: true
+
+    - name: Terraform Format
+      id: tf_fmt
+      run: terraform fmt -check
+      continue-on-error: true
+
+    - name: Terraform Validate
+      id: tf_validate
+      run: terraform validate -no-color
+      continue-on-error: true
+    
+    - name: Check for failures
+      if: steps.tf_init.outcome == 'failure' || steps.tf_fmt.outcome == 'failure' || steps.tf_validate.outcome == 'failure'
+      run: exit 1
