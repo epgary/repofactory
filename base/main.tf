@@ -8,6 +8,7 @@ terraform {
 }
 
 provider "github" {
+  owner = "epgary"
 }
 
 resource "github_repository" "SampleRepo" {
