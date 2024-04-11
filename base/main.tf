@@ -12,7 +12,7 @@ provider "github" {
 
 resource "github_repository" "SampleRepo" {
   name                        = "todelete_sample"
-  visibility                  = "private"
+  visibility                  = "public"
   allow_auto_merge            = false
   allow_merge_commit          = false
   allow_rebase_merge          = false
@@ -29,6 +29,7 @@ resource "github_repository" "SampleRepo" {
   merge_commit_title          = "MERGE_MESSAGE"
   squash_merge_commit_message = "COMMIT_MESSAGES"
   squash_merge_commit_title   = "PR_TITLE"
+  vulnerability_alerts        = true
 }
 
 resource "github_branch_protection" "MainBranchProtection" {
