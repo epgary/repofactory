@@ -1,0 +1,27 @@
+name: Push to feature branch
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!main'
+
+jobs:
+apply:
+    runs-on: ubuntu-latest
+    defaults:
+    run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform Init
+    id: init
+    run: terraform init
+
+    - name: Terraform Apply
+    run: terraform apply -auto-approve
+    env:
+        GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
