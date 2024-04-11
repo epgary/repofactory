@@ -108,7 +108,7 @@ jobs:
 
 
           /*
-           * EXECUTE ONLY FOR PULL REQUEST
+           * EXECUTE ONLY ON PULL REQUEST
            */
 
           if (context.eventName === 'pull_request') {
