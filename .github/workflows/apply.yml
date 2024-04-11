@@ -1,0 +1,29 @@
+name: Terraform CD
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  tf_actions_working_dir: './base'
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform Init
+      id: init
+      run: terraform init -input=false
+
+    - name: Terraform Apply
+      run: terraform apply -input=false -auto-approve
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
