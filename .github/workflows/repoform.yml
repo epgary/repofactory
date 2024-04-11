@@ -59,14 +59,14 @@ jobs:
             issue_number: context.issue.number,
           })
           const botComment = comments.find(comment => {
-            return omment.user.login.includes('github-actions')
+            return comment.user.login.includes('github-actions')
           })
     
           // 2. Prepare format of the comment
           const output =`
             #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Init ⚙️
 
-            
+
             #### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format 🖌
             
             #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validate 🤖
