@@ -64,6 +64,12 @@ jobs:
           
             return isBotComment
           })
+          const pippo = comments.find(comment => {
+            // Check if the comment is from the 'github-actions' bot
+            const isBotComment = comment.user.login === 'github-actions'
+          
+            return comment.user.login
+          })
     
           // 2. Prepare format of the comment
           const output =`
@@ -101,14 +107,14 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               comment_id: botComment.id,
-              body: output
+              body: pippo
             })
           } else {
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: output
+              body: pippo
             })
           }
     
