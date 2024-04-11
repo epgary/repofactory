@@ -12,6 +12,7 @@ on:
     paths-ignore:
       - '**'
 
+      
 env:
   WORKING_DIR: './base'
   TF_LOG: INFO
