@@ -53,6 +53,11 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
+          // 0. Create helper functions
+          function emojiStatus(status) {
+            return (status === 'success') ? '✅' : '❌'
+          }
+    
           // 1. Retrieve existing bot comments for the PR
           const { data: comments } = await github.rest.issues.listComments({
             owner: context.repo.owner,
@@ -64,9 +69,9 @@ jobs:
           })
     
           // 2. Prepare format of the comment
-          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+          const output = `#### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format and Style 🖌
+          #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Initialization ⚙️
+          #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validation 🤖
           <details><summary>Validation Output</summary>
     
           \`\`\`\n
@@ -75,7 +80,7 @@ jobs:
     
           </details>
     
-          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+          #### ${emojiStatus('${{ steps.plan.outcome }}')} Terraform Plan 📖
     
           <details><summary>Show Plan</summary>
     
@@ -103,24 +108,15 @@ jobs:
               body: output
             })
           }
-
-  apply:
-    needs: terraform
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    defaults:
-      run:
-        working-directory: ${{ env.tf_actions_working_dir }}
-    steps:
-    - uses: actions/checkout@v4
     
-    - uses: hashicorp/setup-terraform@v3
+          // 4. Fail the workflow if one of the steps failed
+          const statuses = ['${{ steps.fmt.outcome }}', '${{ steps.init.outcome }}', '${{ steps.validate.outcome }}', '${{ steps.plan.outcome }}']
+          if (statuses.includes("failure")) {
+            core.setFailed("Terraform failed, check PR comment for details")
+          }
 
-    - name: Terraform Init
-      id: init
-      run: terraform init -input=false
-
-    - name: Terraform Apply
-      run: terraform apply -input=false -auto-approve
-      env:
-        GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+          // 5. Update GITHUB_STEP_SUMMARY
+          await core.summary
+              .addHeading('Results')
+              .addRaw(output)
+              .write()
