@@ -1,4 +1,4 @@
-name: Push to Feature branch
+name: Push to Feature
 
 on:
   push:
