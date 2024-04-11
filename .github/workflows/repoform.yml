@@ -22,14 +22,14 @@ jobs:
     
     - uses: hashicorp/setup-terraform@v3
 
-    - name: Terraform fmt
-      id: fmt
-      run: terraform fmt -check
-      continue-on-error: true
-
     - name: Terraform Init
       id: init
       run: terraform init
+      continue-on-error: true
+
+    - name: Terraform Format
+      id: fmt
+      run: terraform fmt -check
       continue-on-error: true
 
     - name: Terraform Validate
@@ -63,8 +63,9 @@ jobs:
           })
     
           // 2. Prepare format of the comment
-          const output = `#### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format and Style 🖌
+          const output =
           #### ${emojiStatus('${{ steps.init.outcome }}')} Terraform Initialization ⚙️
+          `#### ${emojiStatus('${{ steps.fmt.outcome }}')} Terraform Format and Style 🖌
           #### ${emojiStatus('${{ steps.validate.outcome }}')} Terraform Validation 🤖
           <details><summary>Validation Output</summary>
     
