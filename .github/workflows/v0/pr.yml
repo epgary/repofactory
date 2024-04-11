@@ -11,7 +11,7 @@ env:
   TF_INPUT: false
 
 jobs:
-  terraform:
+  pr-infra-check:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
