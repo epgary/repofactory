@@ -119,10 +119,10 @@ jobs:
     
           // 4. Fail the workflow if one of the steps failed
           const statuses = [
-            '${{ steps.init.outcome }}',
-            '${{ steps.fmt.outcome }}',
-            '${{ steps.validate.outcome }}',
-            '${{ steps.plan.outcome }}'
+            '${{ steps.tf_init.outcome }}',
+            '${{ steps.tf_fmt.outcome }}',
+            '${{ steps.tf_validate.outcome }}',
+            '${{ steps.tf_plan.outcome }}'
           ]
           if (statuses.includes("failure")) {
             core.setFailed("Terraform failed, check PR comment for details")
