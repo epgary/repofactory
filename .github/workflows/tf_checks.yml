@@ -99,6 +99,10 @@ jobs:
             .addRaw(output)
             .write()
 
+          /*
+           * EXECUTE ONLY ON PULL REQUEST
+           */
+
           // 3. Fail the workflow if one of the steps failed
           const statuses = [
             '${{ steps.init.outcome }}',
@@ -109,10 +113,6 @@ jobs:
           if (statuses.includes("failure")) {
             core.setFailed("Terraform failed, check step summary for details.")
           }
-
-          /*
-           * EXECUTE ONLY ON PULL REQUEST
-           */
 
           if (context.eventName === 'pull_request') {
             // 4. Retrieve existing bot comments for the PR
