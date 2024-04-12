@@ -26,10 +26,10 @@ jobs:
       run:
         working-directory: ${{ env.WORKING_DIR }}
     outputs:
-      tf_init: ${{ steps.tf_init.outputs.data }}
-      tf_fmt: ${{ steps.tf_fmt.outputs.data }}
-      tf_validate: ${{ steps.tf_validate.outputs.data }}
-      tf_plan: ${{ steps.tf_plan.outputs.data }}
+      tf_init: ${{ steps.tf_init.outputs }}
+      tf_fmt: ${{ steps.tf_fmt.outputs }}
+      tf_validate: ${{ steps.tf_validate.outputs }}
+      tf_plan: ${{ steps.tf_plan.outputs }}
 
     steps:
     - name: Checkout
