@@ -129,7 +129,7 @@ jobs:
               )
             })
     
-            // 5. If comment already exists, update it, otherwise create a new one
+            // 5. Update comment if it exists, otherwise create a new one
             if (ghaBotComment) {
               github.rest.issues.updateComment({
                 owner: context.repo.owner,

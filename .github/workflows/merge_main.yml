@@ -32,4 +32,4 @@ jobs:
       id: tf_apply
       run: terraform apply -auto-approve -no-color
       env:
-        GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.MY_PAT }}
