@@ -2,9 +2,8 @@ name: Push to Feature branch
 
 on:
   push:
-    branches:
-      - '*'
-      - '!main'
+    branches-ignore:
+      - 'main'
 
 env:
   WORKING_DIR: './base'
