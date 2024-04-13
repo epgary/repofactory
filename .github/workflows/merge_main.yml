@@ -1,4 +1,4 @@
-name: Merge to Main
+name: Merge to Main branch
 
 on:
   push:
@@ -11,7 +11,7 @@ env:
   TF_INPUT: false
 
 jobs:
-  merge_main:
+  tf_apply:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -25,11 +25,9 @@ jobs:
       uses: hashicorp/setup-terraform@v3
 
     - name: Terraform Init
-      id: tf_init
       run: terraform init
 
     - name: Terraform Apply
-      id: tf_apply
       run: terraform apply -auto-approve -no-color
       env:
         GITHUB_TOKEN: ${{ secrets.MY_PAT }}
