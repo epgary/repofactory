@@ -3,10 +3,10 @@ name: Terraform Checks
 on:
   push:
     branches-ignore:
-      - main
-  # pull_request:
-  #   branches:
-  #     - main
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
 
 concurrency:
   group: ${{ github.head_ref || github.ref_name }} 
@@ -25,13 +25,6 @@ jobs:
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
-    outputs:
-      tf_init_outcome: ${{ steps.tf_init.outputs.outcome }}
-      tf_fmt_outcome: ${{ steps.tf_fmt.outputs.outcome }}
-      tf_validate_outcome: ${{ steps.tf_validate.outputs.outcome }}
-      tf_validate_stdouterr: ${{ steps.tf_validate.outputs.stdout || steps.tf_validate.outputs.stderr }}
-      tf_plan_outcome: ${{ steps.tf_plan.outputs.outcome }}
-      tf_plan_stdouterr: ${{ steps.tf_plan.outputs.stdout || steps.tf_plan.outputs.stderr }}
 
     steps:
     - name: Checkout
@@ -60,123 +53,114 @@ jobs:
       run: terraform plan -no-color
       continue-on-error: true
 
-  publish:
-    needs: tf_checks
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    defaults:
-      run:
-        working-directory: ${{ env.WORKING_DIR }}
+    - name: Post Workflow Results
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          // 0. Create helper function
+          function emojiStatus(status) {
+            return (status === 'success') ? '✅' : '❌'
+          }
+    
+          // 1. Prepare `tf_checks` output
+          const output = `
+            #### ${emojiStatus('${{ steps.tf_init.outcome }}')} Terraform Init ⚙️
 
-    steps:
-      - name: Post Workflow Results
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            // 0. Create helper function
-            function emojiStatus(status) {
-              return (status === 'success') ? '✅' : '❌'
-            }
-      
-            // 1. Prepare `tf_checks` output
-            const output = `
-              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_init_outcome }}')} Terraform Init ⚙️
-
-              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_fmt_outcome }}')} Terraform Format 🖌
-              
-              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_validate_outcome }}')} Terraform Validate 🤖
-              <details><summary>Show Validate</summary>
-              
-              \`\`\`
-              ${{ needs.tf_checks.outputs.tf_validate_stdouterr }}
-              \`\`\`
-              
-              </details>
-              
-              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_plan_outcome }}')} Terraform Plan 📖
-              <details><summary>Show Plan</summary>
-              
-              \`\`\`
-              ${{ needs.tf_checks.outputs.tf_plan_stdouterr }}
-              \`\`\`
-              
-              </details>
-              
-              *Actor: @${{ github.actor }}
-              Event: \`${{ github.event_name }}\`
-              Working Directory: \`${{ env.WORKING_DIR }}\`
-              Workflow: \`${{ github.workflow }}\`*
-            `;
-
-            // 2. Add `GITHUB_STEP_SUMMARY`
-            await core.summary
-              .addHeading('Results')
-              .addRaw(output)
-              .write()
-
-            // 3. Fail the workflow if one of the steps failed
-            const statuses = [
-              '${{ needs.tf_checks.outputs.tf_init_outcome }}',
-              '${{ needs.tf_checks.outputs.tf_fmt_outcome }}',
-              '${{ needs.tf_checks.outputs.tf_validate_outcome }}',
-              '${{ needs.tf_checks.outputs.tf_plan_outcome }}'
-            ]
-            if (statuses.includes("failure")) {
-              core.setFailed("Terraform failed, check step summary for details.")
-            }
-
-            /*
-            * EXECUTE ONLY IF THERE'S AN OPEN PR FOR THE FEATURE BRANCH
-            */
-
-            if (context.payload.ref.startsWith('refs/heads/')) {
-              // Get the branch name from the ref
-              const branch = context.payload.ref.replace('refs/heads/', '');
+            #### ${emojiStatus('${{ steps.tf_fmt.outcome }}')} Terraform Format 🖌
             
-              // Check if there is an open pull request for the branch
-              const { data: pullRequests } = await github.rest.pulls.list({
+            #### ${emojiStatus('${{ steps.tf_validate.outcome }}')} Terraform Validate 🤖
+            <details><summary>Show Validate</summary>
+            
+            \`\`\`
+            ${{ steps.tf_validate.outputs.stdout || steps.tf_validate.outputs.stderr }}
+            \`\`\`
+            
+            </details>
+            
+            #### ${emojiStatus('${{ steps.tf_plan.outcome }}')} Terraform Plan 📖
+            <details><summary>Show Plan</summary>
+            
+            \`\`\`
+            ${{ steps.tf_plan.outputs.stdout || steps.tf_plan.outputs.stderr }}
+            \`\`\`
+            
+            </details>
+            
+            *Actor: @${{ github.actor }}
+            Event: \`${{ github.event_name }}\`
+            Working Directory: \`${{ env.WORKING_DIR }}\`
+            Workflow: \`${{ github.workflow }}\`*
+          `;
+
+          // 2. Add `GITHUB_STEP_SUMMARY`
+          await core.summary
+            .addHeading('Results')
+            .addRaw(output)
+            .write()
+
+          // 3. Fail the workflow if one of the steps failed
+          const statuses = [
+            '${{ steps.tf_init.outcome }}',
+            '${{ steps.tf_fmt.outcome }}',
+            '${{ steps.tf_validate.outcome }}',
+            '${{ steps.tf_plan.outcome }}'
+          ]
+          if (statuses.includes("failure")) {
+            core.setFailed("Terraform failed, check step summary for details.")
+          }
+
+          /*
+          * IF THE FEATURE BRANCH HAS AN OPEN PULL REQUEST
+          * THEN ADD A BOT COMMENT TO THE PULL REQUEST
+          */
+
+          if (context.payload.ref.startsWith('refs/heads/')) {
+            // Get the branch name from the ref
+            const branch = context.payload.ref.replace('refs/heads/', '');
+          
+            // Check if there is an open pull request for the branch
+            const { data: pullRequests } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:${branch}`,
+            });
+          
+            if (pullRequests.length > 0) {
+              // There is an open pull request for the branch
+              const pullRequest = pullRequests[0];
+          
+              // Retrieve existing bot comments for the PR
+              const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                state: 'open',
-                head: `${context.repo.owner}:${branch}`,
+                issue_number: pullRequest.number,
               });
-            
-              if (pullRequests.length > 0) {
-                // There is an open pull request for the branch
-                const pullRequest = pullRequests[0];
-            
-                // Retrieve existing bot comments for the PR
-                const { data: comments } = await github.rest.issues.listComments({
+          
+              const ghaBotComment = comments.find(comment => {
+                return (
+                  comment.user.type === 'Bot' &&
+                  comment.user.login === 'github-actions[bot]' &&
+                  comment.body.includes('Terraform Init')
+                );
+              });
+          
+              // Update comment if it exists, otherwise create a new one
+              if (ghaBotComment) {
+                github.rest.issues.updateComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
+                  comment_id: ghaBotComment.id,
+                  body: output,
+                });
+              } else {
+                github.rest.issues.createComment({
                   issue_number: pullRequest.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: output,
                 });
-            
-                const ghaBotComment = comments.find(comment => {
-                  return (
-                    comment.user.type === 'Bot' &&
-                    comment.user.login === 'github-actions[bot]' &&
-                    comment.body.includes('Terraform Init')
-                  );
-                });
-            
-                // Update comment if it exists, otherwise create a new one
-                if (ghaBotComment) {
-                  github.rest.issues.updateComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    comment_id: ghaBotComment.id,
-                    body: output,
-                  });
-                } else {
-                  github.rest.issues.createComment({
-                    issue_number: pullRequest.number,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    body: output,
-                  });
-                }
               }
             }
+          }
