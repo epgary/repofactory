@@ -26,10 +26,11 @@ jobs:
       run:
         working-directory: ${{ env.WORKING_DIR }}
     outputs:
-      tf_init: ${{ steps.tf_init.outputs }}
-      tf_fmt: ${{ steps.tf_fmt.outputs }}
-      tf_validate: ${{ steps.tf_validate.outputs }}
-      tf_plan: ${{ steps.tf_plan.outputs }}
+      tf_init_outcome: ${{ steps.tf_init.outputs.outcome }}
+      tf_fmt_outcome: ${{ steps.tf_fmt.outputs.outcome }}
+      tf_validate_outcome: ${{ steps.tf_validate.outputs.outcome }}
+      tf_validate_stdouterr: ${{ steps.tf_validate.outputs.stdout || steps.tf_validate.outputs.stderr }}
+      tf_plan: ${{ steps.tf_plan.outputs.data }}
 
     steps:
     - name: Checkout
@@ -175,15 +176,15 @@ jobs:
       
             // 1. Prepare `tf_checks` output
             const output = `
-              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_fmt.outcome }}')} Terraform Init ⚙️
+              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_init_outcome }}')} Terraform Init ⚙️
 
-              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_fmt.outcome }}')} Terraform Format 🖌
+              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_fmt_outcome }}')} Terraform Format 🖌
               
-              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_validate.outcome }}')} Terraform Validate 🤖
+              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_validate_outcome }}')} Terraform Validate 🤖
               <details><summary>Show Validate</summary>
               
               \`\`\`
-              ${{ needs.tf_checks.outputs.tf_validate.outputs.stdout || needs.tf_checks.outputs.tf_validate.outputs.stderr }}
+              ${{ needs.tf_checks.outputs.tf_validate_stdouterr }}
               \`\`\`
               
               </details>
