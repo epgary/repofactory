@@ -3,10 +3,7 @@ name: Terraform Checks
 on:
   push:
     branches-ignore:
-      - 'main'
-  pull_request:
-    branches:
-      - 'main'
+      - main
 
 concurrency:
   group: ${{ github.head_ref || github.ref_name }} 
