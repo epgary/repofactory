@@ -26,11 +26,12 @@ jobs:
       run:
         working-directory: ${{ env.WORKING_DIR }}
     outputs:
-      tf_init_outcome: ${{ fromJson(steps.tf_init.outputs.outcome) }}
+      tf_init_outcome: ${{ steps.tf_init.outputs.outcome }}
       tf_fmt_outcome: ${{ steps.tf_fmt.outputs.outcome }}
       tf_validate_outcome: ${{ steps.tf_validate.outputs.outcome }}
       tf_validate_stdouterr: ${{ steps.tf_validate.outputs.stdout || steps.tf_validate.outputs.stderr }}
-      tf_plan: ${{ steps.tf_plan.outputs.data }}
+      tf_plan_outcome: ${{ steps.tf_plan.outputs.outcome }}
+      tf_plan_stdouterr: ${{ steps.tf_plan.outputs.stdout || steps.tf_plan.outputs.stderr }}
 
     steps:
     - name: Checkout
@@ -189,11 +190,11 @@ jobs:
               
               </details>
               
-              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_plan.outcome }}')} Terraform Plan 📖
+              #### ${emojiStatus('${{ needs.tf_checks.outputs.tf_plan_outcome }}')} Terraform Plan 📖
               <details><summary>Show Plan</summary>
               
               \`\`\`
-              ${{ needs.tf_checks.outputs.tf_plan.outputs.stdout || needs.tf_checks.outputs.tf_plan.outputs.stderr }}
+              ${{ needs.tf_checks.outputs.tf_plan_stdouterr }}
               \`\`\`
               
               </details>
@@ -212,10 +213,10 @@ jobs:
 
             // 3. Fail the workflow if one of the steps failed
             const statuses = [
-              '${{ needs.tf_checks.outputs.tf_init.outcome }}',
-              '${{ needs.tf_checks.outputs.tf_fmt.outcome }}',
-              '${{ needs.tf_checks.outputs.tf_validate.outcome }}',
-              '${{ needs.tf_checks.outputs.tf_plan.outcome }}'
+              '${{ needs.tf_checks.outputs.tf_init_outcome }}',
+              '${{ needs.tf_checks.outputs.tf_fmt_outcome }}',
+              '${{ needs.tf_checks.outputs.tf_validate_outcome }}',
+              '${{ needs.tf_checks.outputs.tf_plan_outcome }}'
             ]
             if (statuses.includes("failure")) {
               core.setFailed("Terraform failed, check step summary for details.")
