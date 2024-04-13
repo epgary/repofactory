@@ -122,7 +122,7 @@ jobs:
             '${{ steps.tf_init.outcome }}',
             '${{ steps.tf_fmt.outcome }}',
             '${{ steps.tf_validate.outcome }}',
-            '${{ steps.tf_plan.outcome }}'
+            '${{ steps.tf_plan.outcome }}',
           ]
           if (statuses.includes("failure")) {
             core.setFailed("Terraform failed, check PR comment for details")
