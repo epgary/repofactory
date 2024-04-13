@@ -26,7 +26,7 @@ jobs:
       run:
         working-directory: ${{ env.WORKING_DIR }}
     outputs:
-      tf_init_outcome: ${{ fromJson(steps.tf_init.outputs).outcome }}
+      tf_init_outcome: ${{ fromJson(steps.tf_init.outputs.outcome) }}
       tf_fmt_outcome: ${{ steps.tf_fmt.outputs.outcome }}
       tf_validate_outcome: ${{ steps.tf_validate.outputs.outcome }}
       tf_validate_stdouterr: ${{ steps.tf_validate.outputs.stdout || steps.tf_validate.outputs.stderr }}
