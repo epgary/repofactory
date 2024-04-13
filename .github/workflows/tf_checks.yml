@@ -4,9 +4,9 @@ on:
   push:
     branches-ignore:
       - main
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
 
 concurrency:
   group: ${{ github.head_ref || github.ref_name }} 
