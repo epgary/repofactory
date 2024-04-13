@@ -128,38 +128,55 @@ jobs:
             }
 
             /*
-            * EXECUTE ONLY ON PULL REQUEST
+            * EXECUTE ONLY IF THERE'S AN OPEN PR FOR THE FEATURE BRANCH
             */
 
-            if (context.eventName === 'pull_request') {
-              // 4. Retrieve existing bot comments for the PR
-              const { data: comments } = await github.rest.issues.listComments({
+            if (context.payload.ref.startsWith('refs/heads/')) {
+              // Get the branch name from the ref
+              const branch = context.payload.ref.replace('refs/heads/', '');
+            
+              // Check if there is an open pull request for the branch
+              const { data: pullRequests } = await github.rest.pulls.list({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: context.issue.number,
-              })
-              const ghaBotComment = comments.find(comment => {
-                return (
-                  comment.user.type === 'Bot' &&
-                  comment.user.login === 'github-actions[bot]' &&
-                  comment.body.includes('Terraform Init')
-                )
-              })
-      
-              // 5. Update comment if it exists, otherwise create a new one
-              if (ghaBotComment) {
-                github.rest.issues.updateComment({
+                state: 'open',
+                head: `${context.repo.owner}:${branch}`,
+              });
+            
+              if (pullRequests.length > 0) {
+                // There is an open pull request for the branch
+                const pullRequest = pullRequests[0];
+            
+                // Retrieve existing bot comments for the PR
+                const { data: comments } = await github.rest.issues.listComments({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  comment_id: ghaBotComment.id,
-                  body: output
-                })
-              } else {
-                github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: output
-                })
+                  issue_number: pullRequest.number,
+                });
+            
+                const ghaBotComment = comments.find(comment => {
+                  return (
+                    comment.user.type === 'Bot' &&
+                    comment.user.login === 'github-actions[bot]' &&
+                    comment.body.includes('Terraform Init')
+                  );
+                });
+            
+                // Update comment if it exists, otherwise create a new one
+                if (ghaBotComment) {
+                  github.rest.issues.updateComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: ghaBotComment.id,
+                    body: output,
+                  });
+                } else {
+                  github.rest.issues.createComment({
+                    issue_number: pullRequest.number,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: output,
+                  });
+                }
               }
             }
