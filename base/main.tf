@@ -4,7 +4,7 @@ variable "repositories_file" {
 }
 
 locals {
-  repositories = yamldecode(file(var.repositories_file))
+  repositories = yamldecode(file(var.repositories_file))["repositories"]
 }
 
 resource "github_repository" "repos" {
