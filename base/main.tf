@@ -12,7 +12,7 @@ resource "github_repository" "repos" {
 
   name                        = each.value.name
   visibility                  = "public"
-  allow_auto_merge            = each.value.options.allow_auto_merge
+  allow_auto_merge            = false
   allow_merge_commit          = false
   allow_rebase_merge          = false
   allow_squash_merge          = true
@@ -21,7 +21,7 @@ resource "github_repository" "repos" {
   delete_branch_on_merge      = true
   has_discussions             = false
   has_downloads               = true
-  has_issues                  = each.value.options.has_issues
+  has_issues                  = true
   has_projects                = true
   has_wiki                    = true
   merge_commit_message        = "PR_TITLE"
