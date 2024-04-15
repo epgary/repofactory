@@ -3,4 +3,3 @@ repositories:
     main_branch_options:
       require_signed_commits: true
   - name: repo2
-    main_branch_options:
