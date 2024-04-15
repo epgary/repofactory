@@ -33,7 +33,7 @@ resource "github_repository" "repos" {
   vulnerability_alerts        = true
 }
 
-resource "github_branch_protection" "main_branch_protection" {
+resource "github_branch_protection" "main" {
   for_each = { for repo in local.repositories : repo.name => repo }
 
   repository_id          = github_repository.repos[each.key].node_id
