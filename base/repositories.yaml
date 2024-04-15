@@ -1,5 +1,7 @@
 repositories:
-  - name: repo1
-    main_branch_options:
-      require_signed_commits: true
-  - name: repo2
+  - repo1:
+      repository_options:
+        visibility: "public"
+      main_branch_options:
+        require_signed_commits: true
+  - repo2:
