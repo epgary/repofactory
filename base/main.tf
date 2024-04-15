@@ -1,6 +1,6 @@
 variable "repositories_file" {
   description = "Path to the YAML file containing repository configurations"
-  default     = "config.yaml"
+  default     = "repositories.yaml"
 }
 
 locals {
@@ -8,7 +8,7 @@ locals {
 }
 
 resource "github_repository" "repos" {
-  for_each = tomap(local.repositories)
+  for_each = { for repo in local.repositories : repo.name => repo }
 
   name = each.value.name
 
@@ -37,7 +37,7 @@ resource "github_branch_protection" "main_branch_protection" {
   for_each = { for repo in local.repositories : repo.name => repo }
 
   repository_id          = github_repository.repos[each.key].node_id
-  require_signed_commits = each.value.options.require_signed_commits
+  require_signed_commits = each.value.main_branch_options.require_signed_commits
 
   # Shared configuration
   pattern                         = "main"

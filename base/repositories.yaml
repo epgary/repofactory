@@ -1,0 +1,7 @@
+repositories:
+  - name: repo1
+    main_branch_options:
+      require_signed_commits: true
+  - name: repo2
+    main_branch_options:
+      require_signed_commits: false
