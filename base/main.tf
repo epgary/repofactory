@@ -1,5 +1,10 @@
+variable "repositories_file" {
+  description = "Path to the YAML file containing repository configurations"
+  default     = "config.yaml"
+}
+
 locals {
-  repositories = yamldecode(file(config.yaml))["repositories"]
+  repositories = yamldecode(file(var.repositories_file))["repositories"]
 }
 
 resource "github_repository" "repos" {
