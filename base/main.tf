@@ -32,9 +32,9 @@ resource "github_repository" "repos" {
 }
 
 resource "github_branch_protection" "main_branch_protection" {
-  for_each = github_repository.repos
+  for_each = { for repo in local.repositories : repo.name => repo }
 
-  repository_id                   = each.value.node_id
+  repository_id                   = github_repository.repos[each.key].node_id
   pattern                         = "main"
   allows_deletions                = false
   allows_force_pushes             = false
