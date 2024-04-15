@@ -3,3 +3,5 @@ repositories:
     options:
       require_signed_commits: true
   - name: repo2
+    options:
+    require_signed_commits: false
