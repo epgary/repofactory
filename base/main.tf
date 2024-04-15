@@ -1,14 +1,9 @@
-variable "repositories_file" {
-  description = "Path to the YAML file containing repository configurations"
-  default     = "repositories.yaml"
-}
-
 locals {
-  repositories = yamldecode(file(var.repositories_file))["repositories"]
+  repositories = yamldecode(file(config.yaml))["repositories"]
 }
 
 resource "github_repository" "repos" {
-  for_each = { for repo in local.repositories : repo.name => repo }
+  for_each = toset(repositories)
 
   name = each.value.name
 
