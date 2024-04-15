@@ -8,7 +8,7 @@ locals {
 }
 
 resource "github_repository" "repos" {
-  for_each = toset(repositories)
+  for_each = toset(local.repositories)
 
   name = each.value.name
 
