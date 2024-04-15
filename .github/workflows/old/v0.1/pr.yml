@@ -1,4 +1,4 @@
-name: Pull Request Main branch
+name: Pull Request Main Branch
 
 on:
   pull_request:
@@ -60,7 +60,7 @@ jobs:
           })
     
           // 2. Prepare format of the comment
-          const output =`
+          const output = `
             #### ${emojiStatus('${{ steps.tf_init.outcome }}')} Terraform Init ⚙️
 
             #### ${emojiStatus('${{ steps.tf_plan.outcome }}')} Terraform Plan 📖
@@ -98,7 +98,7 @@ jobs:
           // 4. Fail the workflow if one of the steps failed
           const statuses = [
             '${{ steps.tf_init.outcome }}',
-            '${{ steps.tf_plan.outcome }}'
+            '${{ steps.tf_plan.outcome }}',
           ]
           if (statuses.includes("failure")) {
             core.setFailed("Terraform failed, check PR comment for details")
