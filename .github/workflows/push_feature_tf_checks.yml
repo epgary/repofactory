@@ -11,7 +11,7 @@ concurrency:
 
 env:
   WORKING_DIR: './base'
-  TF_LOG: INFO
+  TF_LOG: WARN
   TF_INPUT: false
 
 jobs:
