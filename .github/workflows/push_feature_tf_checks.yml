@@ -79,7 +79,7 @@ jobs:
             <details><summary>Show Plan</summary>
             
             \`\`\`
-            ${{ steps.tf_plan.outputs.stdout || steps.tf_plan.outputs.stderr }}
+            ${{ steps.tf_plan.outputs.stderr }}
             \`\`\`
             
             </details>
