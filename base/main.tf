@@ -1,18 +1,18 @@
-terraform {
-  required_providers {
-    github = {
-      version = "6.2.1"
-      source  = "integrations/github"
-    }
-  }
+variable "repositories_file" {
+  description = "Path to the YAML file containing repository configurations"
+  default     = "repositories.yaml"
 }
 
-provider "github" {}
+locals {
+  repositories = yamldecode(file(var.repositories_file))
+}
 
-resource "github_repository" "SampleRepo" {
-  name                        = "todelete_sample"
+resource "github_repository" "repos" {
+  for_each = { for repo in local.repositories : repo.name => repo }
+
+  name                        = each.value.name
   visibility                  = "public"
-  allow_auto_merge            = false
+  allow_auto_merge            = each.value.options.allow_auto_merge
   allow_merge_commit          = false
   allow_rebase_merge          = false
   allow_squash_merge          = true
@@ -21,7 +21,7 @@ resource "github_repository" "SampleRepo" {
   delete_branch_on_merge      = true
   has_discussions             = false
   has_downloads               = true
-  has_issues                  = true
+  has_issues                  = each.value.options.has_issues
   has_projects                = true
   has_wiki                    = true
   merge_commit_message        = "PR_TITLE"
@@ -31,8 +31,10 @@ resource "github_repository" "SampleRepo" {
   vulnerability_alerts        = true
 }
 
-resource "github_branch_protection" "MainBranchProtection" {
-  repository_id                   = github_repository.SampleRepo.node_id
+resource "github_branch_protection" "main_branch_protection" {
+  for_each = github_repository.repos
+
+  repository_id                   = each.value.node_id
   pattern                         = "main"
   allows_deletions                = false
   allows_force_pushes             = false
@@ -45,4 +47,5 @@ resource "github_branch_protection" "MainBranchProtection" {
   required_status_checks {
     strict = true
   }
+  require_signed_commits = each.value.options.require_signed_commits
 }
