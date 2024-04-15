@@ -10,7 +10,7 @@ locals {
 resource "github_repository" "repos" {
   for_each = { for repo in local.repositories : keys(repo)[0] => values(repo)[0] }
 
-  name       = each.value.name
+  name       = each.key
   visibility = try(each.value.repository_options.visibility, "private")
 
   # Shared configuration
