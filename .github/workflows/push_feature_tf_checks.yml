@@ -11,7 +11,7 @@ concurrency:
 
 env:
   WORKING_DIR: './base'
-  TF_LOG: WARN
+  TF_LOG: INFO
   TF_INPUT: false
 
 jobs:
@@ -67,19 +67,21 @@ jobs:
             #### ${emojiStatus('${{ steps.tf_fmt.outcome }}')} Terraform Format 🖌
             
             #### ${emojiStatus('${{ steps.tf_validate.outcome }}')} Terraform Validate 🤖
-            <details><summary>Show Validate</summary>
+            <details><summary>Show Output</summary>
             
             \`\`\`
-            ${{ steps.tf_validate.outputs.stdout || steps.tf_validate.outputs.stderr }}
+            ${{ steps.tf_validate.outputs.stdout}}
+            ${{ steps.tf_plan.outputs.stderr}}
             \`\`\`
             
             </details>
             
             #### ${emojiStatus('${{ steps.tf_plan.outcome }}')} Terraform Plan 📖
-            <details><summary>Show Plan</summary>
+            <details><summary>Show Output</summary>
             
             \`\`\`
-            ${{ steps.tf_plan.outputs.stderr }}
+            ${{ steps.tf_plan.outputs.stdout}}
+            ${{ steps.tf_plan.outputs.stderr}}
             \`\`\`
             
             </details>
