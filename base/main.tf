@@ -10,7 +10,9 @@ locals {
 resource "github_repository" "repos" {
   for_each = { for repo in local.repositories : repo.name => repo }
 
-  name                        = each.value.name
+  name = each.value.name
+
+  # Shared configuration
   visibility                  = "public"
   allow_auto_merge            = false
   allow_merge_commit          = false
@@ -34,7 +36,10 @@ resource "github_repository" "repos" {
 resource "github_branch_protection" "main_branch_protection" {
   for_each = { for repo in local.repositories : repo.name => repo }
 
-  repository_id                   = github_repository.repos[each.key].node_id
+  repository_id          = github_repository.repos[each.key].node_id
+  require_signed_commits = each.value.options.require_signed_commits
+
+  # Shared configuration
   pattern                         = "main"
   allows_deletions                = false
   allows_force_pushes             = false
@@ -47,5 +52,4 @@ resource "github_branch_protection" "main_branch_protection" {
   required_status_checks {
     strict = true
   }
-  require_signed_commits = each.value.options.require_signed_commits
 }
