@@ -44,12 +44,12 @@ jobs:
 
     - name: Terraform Validate
       id: tf_validate
-      run: terraform validate -no-color
+      run: terraform validate
       continue-on-error: true
     
     - name: Terraform Plan
       id: tf_plan
-      run: terraform plan -no-color
+      run: terraform plan
       continue-on-error: true
 
     - name: Create Job Summary
