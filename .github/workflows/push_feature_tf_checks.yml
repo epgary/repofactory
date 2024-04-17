@@ -81,8 +81,8 @@ jobs:
             <details><summary>Show Output</summary>
             
             \`\`\`
-            ${{ steps.tf_plan.outputs.stdout}}
-            ${{ steps.tf_plan.outputs.stderr}}
+            `${{ steps.tf_plan.outputs.stdout }}`.trim();
+            ${{ steps.tf_plan.outputs.stderr }}
             \`\`\`
             
             </details>
