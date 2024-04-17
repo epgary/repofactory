@@ -7,8 +7,10 @@ on:
 
 env:
   WORKING_DIR: './base'
-  TF_LOG: INFO
+  TF_LOG: ERROR
+  TF_CLI_ARGS: "-no-color"
   TF_INPUT: false
+  TF_IN_AUTOMATION: true
 
 jobs:
   tf_checks:
