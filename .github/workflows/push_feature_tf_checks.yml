@@ -63,9 +63,6 @@ jobs:
           }
     
           // 1. Prepare `tf_checks` output
-          const tfValidateOutput = `${{ steps.tf_validate.outputs.stdout || steps.tf_validate.outputs.stderr }}`.trim();
-          const tfPlanStdout = `${{ steps.tf_plan.outputs.stdout }}`.trim();
-          const tfPlanStderr = `${{ steps.tf_plan.outputs.stderr }}`.trim();
           const output = `
             #### ${emojiStatus('${{ steps.tf_init.outcome }}')} Terraform Init ⚙️
 
@@ -84,8 +81,8 @@ jobs:
             <details><summary>Show Output</summary>
             
             \`\`\`
-            ${tfPlanStdout}
-            ${tfPlanStderr}
+            ${{ steps.tf_plan.outputs.stdout }}
+            ${{ steps.tf_plan.outputs.stderr }}
             \`\`\`
             
             </details>
