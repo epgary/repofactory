@@ -36,9 +36,10 @@ resource "github_repository" "repos" {
 resource "github_branch_protection" "main" {
   for_each = { for repo in local.repositories : keys(repo)[0] => values(repo)[0] }
 
-  pattern                = "main"
-  repository_id          = github_repository.repos[each.key].node_id
-  require_signed_commits = try(each.value.main_branch_options.require_signed_commits, false)
+  pattern                 = "main"
+  repository_id           = github_repository.repos[each.key].node_id
+  require_signed_commits  = try(each.value.main_branch_options.require_signed_commits, false)
+  required_linear_history = try(each.value.main_branch_options.required_linear_history, false)
 
   # Shared configuration
   allows_deletions                = false
