@@ -36,11 +36,11 @@ resource "github_repository" "repos" {
 resource "github_branch_protection" "main" {
   for_each = { for repo in local.repositories : keys(repo)[0] => values(repo)[0] }
 
+  pattern                = "main"
   repository_id          = github_repository.repos[each.key].node_id
   require_signed_commits = try(each.value.main_branch_options.require_signed_commits, false)
 
   # Shared configuration
-  pattern                         = "main"
   allows_deletions                = false
   allows_force_pushes             = false
   enforce_admins                  = true
@@ -55,7 +55,8 @@ resource "github_branch_protection" "main" {
 }
 
 resource "github_repository_environment" "test" {
-  repository  = github_repository.repos.name
+  for_each    = github_repository.repos
+  repository  = each.value.name
   environment = "environment/test"
   wait_timer  = 10000
   deployment_branch_policy {
@@ -65,7 +66,8 @@ resource "github_repository_environment" "test" {
 }
 
 resource "github_repository_environment_deployment_policy" "test" {
-  repository     = github_repository.repos.name
-  environment    = github_repository_environment.test.environment
+  for_each       = github_repository.repos
+  repository     = each.value.name
+  environment    = github_repository_environment.test[each.key].environment
   branch_pattern = "releases/*"
 }
