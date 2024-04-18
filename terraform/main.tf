@@ -53,3 +53,19 @@ resource "github_branch_protection" "main" {
     strict = true
   }
 }
+
+resource "github_repository_environment" "test" {
+  repository  = github_repository.repos.name
+  environment = "environment/test"
+  wait_timer  = 10000
+  deployment_branch_policy {
+    protected_branches     = false
+    custom_branch_policies = true
+  }
+}
+
+resource "github_repository_environment_deployment_policy" "test" {
+  repository     = github_repository.repos.name
+  environment    = github_repository_environment.test.environment
+  branch_pattern = "releases/*"
+}
