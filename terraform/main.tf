@@ -53,4 +53,3 @@ resource "github_branch_protection" "main" {
     strict = true
   }
 }
-
