@@ -5,14 +5,12 @@ on:
     branches-ignore:
       - main
 
-concurrency:
-  group: ${{ github.head_ref || github.ref_name }} 
-  cancel-in-progress: true
-
 env:
-  WORKING_DIR: './base'
+  WORKING_DIR: './terraform'
   TF_LOG: ERROR
+  TF_CLI_ARGS: "-no-color"
   TF_INPUT: false
+  TF_IN_AUTOMATION: true
 
 jobs:
   tf_checks:
@@ -42,12 +40,12 @@ jobs:
 
     - name: Terraform Validate
       id: tf_validate
-      run: terraform validate -no-color
+      run: terraform validate
       continue-on-error: true
     
     - name: Terraform Plan
       id: tf_plan
-      run: terraform plan -no-color
+      run: terraform plan
       continue-on-error: true
 
     - name: Create Job Summary
@@ -79,8 +77,8 @@ jobs:
             <details><summary>Show Output</summary>
             
             \`\`\`
-            ${{ steps.tf_plan.outputs.stdout}}
-            ${{ steps.tf_plan.outputs.stderr}}
+            ${{ steps.tf_plan.outputs.stdout }}
+            ${{ steps.tf_plan.outputs.stderr }}
             \`\`\`
             
             </details>
